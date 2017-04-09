@@ -23,9 +23,14 @@ export class TraceDetail extends Component {
     if (this.props.trace) {
       return (
         <div>
-          <svg width="100%" height="250" version="1.1" xmlns="http://www.w3.org/2000/svg">
-            {this.props.trace.spans.map((s, i) => <SpanRow id={i} events={s.events} traceStartTimestamp={this.props.trace.startTimestamp} />)}
-          </svg>
+          <div style={{display: 'inline-block', width: '25%', verticalAlign: 'top', lineHeight: '25px'}}>
+            {this.props.trace.spans.map((s, i) => <div>{s.hostname}</div>)}
+          </div>
+          <div style={{display: 'inline-block', width: '75%'}}>
+            <svg width="100%" height="250" version="1.1" xmlns="http://www.w3.org/2000/svg">
+              {this.props.trace.spans.map((s, i) => <SpanRow id={i} events={s.events} traceStartTimestamp={this.props.trace.startTimestamp} />)}
+            </svg>
+          </div>
         </div>
       );
     } else {

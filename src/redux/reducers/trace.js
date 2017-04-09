@@ -52,6 +52,7 @@ const traceReducer = (state = traceInitialState, action) => {
 
         spansList.push({
           spanId: k,
+          hostname: orderedEvents[0].hostname,
           startTimestamp: startTimestamp,
           endTimestamp: endTimestamp,
           events: orderedEvents,
