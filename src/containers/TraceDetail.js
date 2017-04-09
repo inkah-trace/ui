@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as traceActions from '../actions/trace';
-import SpanList from '../components/SpanList';
+import * as traceActions from '../redux/actions/trace';
+import SpanRow from '../components/SpanRow';
 
 const mapStateToProps = (state) => ({
-  traces: state.trace.traces,
-
+  trace: state.traces.activeTrace,
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -15,24 +14,27 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-class TraceDetail extends Component {
+export class TraceDetail extends Component {
   componentDidMount = () => {
-    this.props.traceActions.selectTrace(this.props.params.id);
+    this.props.traceActions.fetchTrace(this.props.params.id);
   }
 
   render() {
-    const selectedTrace = this.props.traces.find((t) => {
-      return t.id === this.props.params.id;
-    });
+    if (this.props.trace) {
+      return (
+        <div>
+          <svg width="100%" height="250" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            {this.props.trace.spans.map((s, i) => <SpanRow id={i} events={s.events} traceStartTimestamp={this.props.trace.startTimestamp} />)}
+          </svg>
+        </div>
+      );
+    } else {
+      return (
+        <div>Loading...</div>
+      );
+    }
 
-    return (
-      <div>
-        <SpanList
-          trace={selectedTrace}
-          />
-      </div>
-    );
   }
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(TraceDetail);
